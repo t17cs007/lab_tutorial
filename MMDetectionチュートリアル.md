@@ -66,10 +66,52 @@ $ cd myconfigs
 次に，自分の使いたいモデルのConfigファイルを拡張していく．
 今回はmask-rcnnの拡張を例にして行う．
 ```python
+# 拡張元
 _base_ = ["../configs/mask_rcnn/mask-rcnn_r50_fpn_2x_coco.py"]
 
+# 学習エポックの設定などができる
+train_cfg = dict(
+    type='EpochBasedTrainLoop',
+    max_epochs=12,
+    val_interval=1)
+val_cfg = dict(type='ValLoop')
+test_cfg = dict(type='TestLoop')
 
+# オプティマイザの設定ができる
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=dict(
+        type='SGD',
+        lr=0.02,
+        momentum=0.9,
+        weight_decay=0.0001),
+    clip_grad=None,
+    )
+
+# 画像のデータ拡張について設定できる
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+    dict(
+        type='RandomResize', scale=[(1333, 640), (1333, 800)],
+        keep_ratio=True),
+    dict(type='RandomFlip', prob=0.5),
+    dict(type='PackDetInputs')
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='Resize', scale=(1333, 800), keep_ratio=True),
+    dict(
+        type='PackDetInputs',
+        meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
+                   'scale_factor'))
+]
+train_dataloader = dict(dataset=dict(pipeline=train_pipeline))
+val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 ```
+
+色々試して一番良い結果となる方法を探すこと．
 </details>
 
 ### 独自データセットの作り方
