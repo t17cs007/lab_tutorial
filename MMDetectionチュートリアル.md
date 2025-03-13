@@ -33,6 +33,17 @@ $ pip install -e . -v
 
 https://mmdetection.readthedocs.io/en/latest/user_guides/inference.html
 
+<details><summary>実行例</summary>
+  
+```bash
+$ mkdir checkpoints
+$ cd checkpoints
+$ curl -LO https://download.openmmlab.com/mmdetection/v3.0/rtmdet/rtmdet_l_8xb32-300e_coco/rtmdet_l_8xb32-300e_coco_20220719_112030-5a0be7c4.pth
+$ cd ..
+$ python demo/image_demo.py demo/demo.jpg configs/rtmdet/rtmdet_l_8xb32-300e_coco.py --weights checkpoints/rtmdet_l_8xb32-300e_coco_20220719_112030-5a0be7c4.pth --device cpu
+```
+</details>
+
 ## 発展的内容
 
 ### ファインチューニング
@@ -48,3 +59,5 @@ https://mmdetection.readthedocs.io/en/latest/user_guides/index.html
 この研究室では，```CVAT```というツールを使うことが多い．
 
 画像のラベリングでは使いやすいと思う．
+
+https://docs.cvat.ai/docs/manual/basics/create_an_annotation_task/
