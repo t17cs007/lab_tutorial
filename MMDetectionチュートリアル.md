@@ -121,3 +121,66 @@ test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 画像のラベリングでは使いやすいと思う．
 
 https://docs.cvat.ai/docs/manual/basics/create_an_annotation_task/
+
+## 推論結果を使って別タスクを行うには
+
+主に以下の2つの方法がある．
+1. mmdetectionの推論コードを読んで改造する
+2. mmdeployを用いてなんとかする
+
+### mmdetectionの推論コードを読んで改造する
+
+以下はオープンソースを自分で改変していくために必要な勘などが書いてある．
+どのようにやったら上手くいきそうか予想できたら，その予想が正しそうか試してみよう．
+研究活動には正解がないため，この機会に勘を鍛えよう．
+
+<details><summary>ヒント1</summary>
+  
+良く読まなければならないのは，```demo/image_demo.py```や```demo/video_demo.py```のコードである．
+これらのコードに注目する理由は，推論時のデモコードとして利用されているため，このコード内にヒントがあるはずだ，と考えることができるため．
+</details>
+
+<details><summary>ヒント2</summary>
+
+コード62行目に```inference_detector```関数がある．
+これが，```frame```を```model```に入力し，```result```の出力が得られていることが分かる．
+関数名や引数から，この関数の戻り値について調べれば良さそうだと分かる．
+</details>
+
+<details><summary>ヒント3</summary>
+
+```inference_detector```関数の定義を確認する．
+https://github.com/open-mmlab/mmdetection/blob/main/mmdet/apis/inference.py#L122
+
+```Returns```に```DetDataSample```クラスがあるため，これを見に行けば良さそうである．
+</details>
+
+
+<details><summary>ヒント4</summary>
+
+```DetDataSample```クラスの定義を確認する．
+https://github.com/open-mmlab/mmdetection/blob/main/mmdet/structures/det_data_sample.py
+
+クラスの宣言直後にメンバ変数の説明がされている．
+これを読んで，どの変数が何を保存しているのか確かめよう．
+</details>
+
+<details><summary>ヒント5</summary>
+
+例えば，マスク画像を作りたいという場合，もう一度```demo/image_demo.py```や```demo/video_demo.py```のコードを振り返る必要がある．
+ヒント4で得た情報からどのようにマスクを作るのか，コード63行目の```visualizer.add_sample```にヒントがありそうだと分かる．
+</details>
+
+<details><summary>ヒント6</summary>
+
+ヒント5の実装例は以下のクラスなどがある．
+https://github.com/open-mmlab/mmdetection/blob/main/mmdet/visualization/local_visualizer.py#L393
+
+この中でヒントになりそうな変数名がある．
+それは```pred```という名前がついているものである．
+なぜなら，```pred```は```prediction```，つまり予測という意味の英単語であり，推論とほぼ同じ意味である．
+ちなみに，```gt```は```Ground Truth```であり，正解という意味で使われる英単語である．
+この関数を追って，どのように改造したらよいのか検討すると良い．
+この```add_sample```内のコードを改造するために，生成系AIを使うのは一手である．
+生成系AIを上手に使おう．
+</details>
