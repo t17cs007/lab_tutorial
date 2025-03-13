@@ -54,6 +54,24 @@ https://mmdetection.readthedocs.io/en/latest/user_guides/index.html
 
 ```Config```や```データセット```の作り方を良く確認すること．
 
+<details><summary>Configのいじり方</summary>
+
+基本的には，既存のConfigファイルを拡張することで学習の設定を行う．
+まず，独自Configであることを示すために，別ディレクトリを作ってしまう．
+```bash
+$ mkdir myconfigs
+$ cd myconfigs
+```
+
+次に，自分の使いたいモデルのConfigファイルを拡張していく．
+今回はmask-rcnnの拡張を例にして行う．
+```python
+_base_ = ["../configs/mask_rcnn/mask-rcnn_r50_fpn_2x_coco.py"]
+
+
+```
+</details>
+
 ### 独自データセットの作り方
 
 この研究室では，```CVAT```というツールを使うことが多い．
