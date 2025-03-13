@@ -168,17 +168,21 @@ https://github.com/open-mmlab/mmdetection/blob/main/mmdet/structures/det_data_sa
 <details><summary>ヒント5</summary>
 
 例えば，マスク画像を作りたいという場合，もう一度```demo/image_demo.py```や```demo/video_demo.py```のコードを振り返る必要がある．
-ヒント4で得た情報からどのようにマスクを作るのか，コード63行目の```visualizer.add_sample```にヒントがありそうだと分かる．
+ヒント4で得た情報から，推論結果が保存された変数からどのようにマスクを作るのか，見ていく必要がある．
+この流れから，コード63行目の```visualizer.add_sample```にヒントがありそうだと分かる．
+なぜなら，frameとresultを同時に引数としているため，元画像と推論結果から何かを行っていそうだと判断できるため．
 </details>
 
 <details><summary>ヒント6</summary>
 
-ヒント5の実装例は以下のクラスなどがある．
+githubでは関数をクリックすると，関数の定義の候補がでてくる．
+関数をクリックしてみよう．
+例えば，ヒント5の実装例は以下のクラスなどがある．
 https://github.com/open-mmlab/mmdetection/blob/main/mmdet/visualization/local_visualizer.py#L393
 
 この中でヒントになりそうな変数名がある．
 それは```pred```という名前がついているものである．
-なぜなら，```pred```は```prediction```，つまり予測という意味の英単語であり，推論とほぼ同じ意味である．
+なぜなら，```pred```は```prediction```，つまり予測という意味の英単語であり，推論とほぼ同じ意味だからだ．
 ちなみに，```gt```は```Ground Truth```であり，正解という意味で使われる英単語である．
 この関数を追って，どのように改造したらよいのか検討すると良い．
 この```add_sample```内のコードを改造するために，生成系AIを使うのは一手である．
