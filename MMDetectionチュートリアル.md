@@ -29,6 +29,8 @@ $ pip install -e . -v
 
 以下のページを参考にMMDetectionで推論すること．
 
+ドキュメントをよく読めば問題なく実行できる．英語がんばろう．
+
 https://mmdetection.readthedocs.io/en/latest/user_guides/inference.html
 
 ## 発展的内容
