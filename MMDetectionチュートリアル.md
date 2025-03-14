@@ -114,6 +114,15 @@ test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 色々試して一番良い結果となる方法を探すこと．
 </details>
 
+<details><summary>学習させる</summary>
+
+以下のコマンドを打てばよい．
+```myconfigs/mask_rcnn.py```は適宜変えること．
+```bash
+$ python tools/train.py myconfigs/mask_rcnn.py
+```
+</details>
+
 ### 独自データセットの作り方
 
 この研究室では，```CVAT```というツールを使うことが多い．
@@ -121,6 +130,19 @@ test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 画像のラベリングでは使いやすいと思う．
 
 https://docs.cvat.ai/docs/manual/basics/create_an_annotation_task/
+
+<details><summary>独自データセットのファイル構成</summary>
+
+```
+mmdetection---data---mydata---train
+                            |
+                            |-val
+                            |
+                            |-train_annotation.json
+                            |
+                            |-val-annotation.json
+```
+</details>
 
 ## 推論結果を使って別タスクを行うには
 
@@ -188,3 +210,9 @@ https://github.com/open-mmlab/mmdetection/blob/main/mmdet/visualization/local_vi
 この```add_sample```内のコードを改造するために，生成系AIを使うのは一手である．
 生成系AIを上手に使おう．
 </details>
+
+### mmdeployを用いてなんとかする
+
+公式ドキュメントを読んでなんとかすること．
+やったことがないのでわかりません．
+君が先駆者だ．
