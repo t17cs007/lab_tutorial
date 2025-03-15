@@ -224,6 +224,12 @@ https://paperswithcode.com
 
 https://paperswithcode.com/task/instance-segmentation
 
+### 筆者が使ったことのあるモデルと感想
+
+* Mask-RCNN : 軽い．大きい物体検出ならこれで十分
+* QueryInst : 重い．小さい物体でも検出できる．precisionは低いがrecallは高いイメージ
+* Mask2Former : かなり重い．小さい物体でも検出できる．precisionは高いがrecallは低いイメージ
+
 ## 推論結果を使って別タスクを行うには
 
 主に以下の2つの方法がある．
