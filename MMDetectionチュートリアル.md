@@ -62,7 +62,7 @@ https://mmdetection.readthedocs.io/en/latest/user_guides/train.html#train-with-c
 
 ```bash
 $ cd data
-$ curl =LOJ https://github.com/matterport/Mask_RCNN/releases/download/v2.1/balloon_dataset.zip
+$ curl -LOJ https://github.com/matterport/Mask_RCNN/releases/download/v2.1/balloon_dataset.zip
 $ unzip balloon_dataset.zip
 $ touch convert_balloon_to_coco.py
 ### https://mmdetection.readthedocs.io/en/latest/user_guides/train.html#coco-annotation-formatにあるpythonコードをconvert_balloon_to_coco.pyにコピペする
