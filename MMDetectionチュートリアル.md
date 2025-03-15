@@ -2,6 +2,12 @@
 
 ## チュートリアル
 
+実行例を載せたが，どうしてもわからないときや答え合わせで読むこと．
+
+***読んだほうが効率的に学習できるわけではない．***
+
+英語を頑張って読む訓練を積もう．英語が苦手なら，生成系AIなどを使ってなんとか解読しよう．これも訓練である．
+
 ### インストール
 
 以下のページを参考にインストールしよう．
@@ -41,6 +47,34 @@ $ cd checkpoints
 $ curl -LO https://download.openmmlab.com/mmdetection/v3.0/rtmdet/rtmdet_l_8xb32-300e_coco/rtmdet_l_8xb32-300e_coco_20220719_112030-5a0be7c4.pth
 $ cd ..
 $ python demo/image_demo.py demo/demo.jpg configs/rtmdet/rtmdet_l_8xb32-300e_coco.py --weights checkpoints/rtmdet_l_8xb32-300e_coco_20220719_112030-5a0be7c4.pth --device cpu
+```
+</details>
+
+### 独自データセットでの学習
+
+以下のページを読んで，独自データセットでの学習方法を確認すること．
+
+ドキュメントを読むべし．
+
+https://mmdetection.readthedocs.io/en/latest/user_guides/train.html#train-with-customized-datasets
+
+<details><summary>実行例</summary>
+
+```bash
+$ cd data
+$ curl =LOJ https://github.com/matterport/Mask_RCNN/releases/download/v2.1/balloon_dataset.zip
+$ unzip balloon_dataset.zip
+$ touch convert_balloon_to_coco.py
+### https://mmdetection.readthedocs.io/en/latest/user_guides/train.html#coco-annotation-formatにあるpythonコードをconvert_balloon_to_coco.pyにコピペする
+$ python convert_balloon_to_coco.py
+$ cd ..
+$ mkdir balloon_config
+$ cd balloon_config
+$ touch mask_rcnn.py
+### https://mmdetection.readthedocs.io/en/latest/user_guides/train.html#prepare-a-configにあるpythonコードをmask_rcnn.pyにコピペする
+$ cd ..
+$ python tools/train.py balloon_config/mask_rcnn.py
+$ python tools/test.py balloon_config/mask_rcnn.py work_dirs/mask_rcnn/epoch_12.pth
 ```
 </details>
 
@@ -133,16 +167,62 @@ https://docs.cvat.ai/docs/manual/basics/create_an_annotation_task/
 
 <details><summary>独自データセットのファイル構成</summary>
 
+例えば，以下の構成でデータセットを用意したとする．
+
 ```
-mmdetection---data---mydata---train
+mmdetection---data---mydata---train-xxx.png
+                            |   |---yyy.png
+                            |   |---zzz.png
                             |
-                            |-val
+                            |-val-aaa.png
+                            |  |--bbb.png
+                            |  |--ccc.png
                             |
                             |-train_annotation.json
                             |
                             |-val-annotation.json
 ```
+
+すると，Configファイルは以下のように変える必要がある．
+```python
+data_root = "data/mydata/"
+meta_info = {
+  "classes" : ("cls1", "cls2")
+  "palette" : [
+    (220, 20, 60), (30, 170, 230)
+  ]
+}
+
+train_dataloader = dict(
+  dataset=dict(
+    data_root=data_root,
+    meta_info=meta_info,
+    ann_file="train_annotation.json"
+    data_prefix=dict(img="train/")))
+
+val_dataloader = dict(
+  dataset=dict(
+    data_root=data_root,
+    meta_info=meta_info,
+    ann_file="val_annotation.json"
+    data_prefix=dict(img="val/")))
+```
 </details>
+
+### モデルを選ぶには
+
+mmdetectionではモデルの一覧が示されている．
+
+https://github.com/open-mmlab/mmdetection?tab=readme-ov-file#overview-of-benchmark-and-model-zoo
+
+mmdetectionはなぜか更新されなくなってきている（ような気がする）．
+mmdetection以外のツールで最新のモデルが使える可能性があるため，以下のサイトを見てみても良いだろう．
+
+https://paperswithcode.com
+
+インスタンスセグメンテーションの場合，以下のようにすれば良い感じのものを探せる．
+
+https://paperswithcode.com/task/instance-segmentation
 
 ## 推論結果を使って別タスクを行うには
 
