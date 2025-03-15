@@ -165,7 +165,7 @@ $ python tools/train.py myconfigs/mask_rcnn.py
 
 https://docs.cvat.ai/docs/manual/basics/create_an_annotation_task/
 
-<details><summary>独自データセットのファイル構成</summary>
+<details><summary>独自データセットのファイル構成とそのときのConfigファイル</summary>
 
 例えば，以下の構成でデータセットを用意したとする．
 
