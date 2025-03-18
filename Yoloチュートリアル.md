@@ -1,6 +1,6 @@
 # Yoloを使おう
 
-## チュートリアル
+## 紹介
 
 ### インストール
 
@@ -24,3 +24,15 @@ $ pip install -e . -v
 画像は適当に用意すること．
 
 https://docs.ultralytics.com/modes/predict/#working-with-results
+
+### 学習
+
+既存モデルでファインチューニングできる．
+
+https://docs.ultralytics.com/ja/modes/train/
+
+データセットは次のページを見て，形式を整えること．
+
+https://docs.ultralytics.com/ja/datasets/detect/
+
+https://docs.ultralytics.com/ja/datasets/segment/#ultralytics-yolo-format
