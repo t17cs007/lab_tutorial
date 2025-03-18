@@ -25,6 +25,11 @@ $ pip install -e . -v
 
 https://docs.ultralytics.com/modes/predict/#working-with-results
 
+ONNX形式で色々な環境で動作させることができる．
+ONNXで動かすには次の記事を参照すること．
+
+https://qiita.com/sister_DB/items/3251e47623cbd3fb7648
+
 ### 学習
 
 既存モデルでファインチューニングできる．
