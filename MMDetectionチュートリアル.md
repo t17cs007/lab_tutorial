@@ -37,6 +37,14 @@ $ pip install -e . -v
 
 ドキュメントをよく読めば問題なく実行できる．英語がんばろう．
 
+実際に手を動かすところ．
+1. Inference with existing models で Demos の Image demo を動かすために必要なファイルのダウンロード（checkpointファイルのみ）
+2. Demos の Image demo を動かしてみる
+
+気力があれば，High-level APIs for inference - Inferencer も読んでみること．
+
+もしmmdetectionを道具として使うなら，ここを読むと良い．
+
 https://mmdetection.readthedocs.io/en/latest/user_guides/inference.html
 
 <details><summary>実行例</summary>
@@ -232,12 +240,22 @@ https://paperswithcode.com/task/instance-segmentation
 
 ## 推論結果を使って別タスクを行うには
 
-主に以下の2つの方法がある．
-1. mmdetectionの推論コードを読んで改造する
-2. mmdeployを用いてなんとかする
+主に以下の3つの方法がある．
+1. mmdetectionの推論コードを使う
+2. mmdetectionの推論コードを読んで改造する
+3. mmdeployを用いてなんとかする
+
+### mmdetectionの推論コードを使う
+
+以下のページにmmdetectionで用意されている推論コードから結果を得ることができる．
+
+https://mmdetection.readthedocs.io/en/latest/user_guides/inference.html#output
+
+サーバサイドでmmdetectionを使う場合はこれで事足りるだろう．
 
 ### mmdetectionの推論コードを読んで改造する
 
+もし，mmdetectionの推論コードでは満足できない出力であれば，自力でコードを改造する必要がある．
 以下はオープンソースを自分で改変していくために必要な勘などが書いてある．
 どのようにやったら上手くいきそうか予想できたら，その予想が正しそうか試してみよう．
 研究活動には正解がないため，この機会に勘を鍛えよう．
@@ -302,3 +320,60 @@ https://github.com/open-mmlab/mmdetection/blob/main/mmdet/visualization/local_vi
 公式ドキュメントを読んでなんとかすること．
 やったことがないのでわかりません．
 君が先駆者だ．
+
+## mmdetectionのdockerを立てる
+
+サーバサイドのプログラムを書く時，研究室の都合でサーバを変えてほしいと言われるときがある．
+また，ライブラリの競合が発生して面倒になるときもごくまれにある．
+そのため，サーバサイドのプログラムを書く時はdockerを立てることを勧める．
+
+公式のdockerのコードは以下のページから確認できる．
+
+https://github.com/open-mmlab/mmdetection/blob/main/docker/Dockerfile
+
+ただし，このままではチュートリアルで作ったときと同じ環境が作れない．
+もしチュートリアルと同じ環境を作りたかったら，以下のようにコードを改変すれば良い．
+pytorchのdocker fileの値，mmengineの値，mmcvの値を変えただけである．
+
+```
+ARG PYTORCH="2.5.1"
+ARG CUDA="12.4"
+ARG CUDNN="9"
+
+FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+
+ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6+PTX" \
+    TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
+    CMAKE_PREFIX_PATH="$(dirname $(which conda))/../" \
+    FORCE_CUDA="1"
+
+# Avoid Public GPG key error
+# https://github.com/NVIDIA/nvidia-docker/issues/1631
+RUN rm /etc/apt/sources.list.d/cuda.list \
+    && rm /etc/apt/sources.list.d/nvidia-ml.list \
+    && apt-key del 7fa2af80 \
+    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub \
+    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
+
+# (Optional, use Mirror to speed up downloads)
+# RUN sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//http:\/\/mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list && \
+#    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# Install the required packages
+RUN apt-get update \
+    && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install MMEngine and MMCV
+RUN pip install openmim && \
+    mim install "mmengine<1.0.0" "mmcv>=2.0.0rc4,<2.2.0"
+
+# Install MMDetection
+RUN conda clean --all \
+    && git clone https://github.com/open-mmlab/mmdetection.git /mmdetection \
+    && cd /mmdetection \
+    && pip install --no-cache-dir -e .
+
+WORKDIR /mmdetection
+```
