@@ -38,8 +38,8 @@ $ pip install -e . -v
 ドキュメントをよく読めば問題なく実行できる．英語がんばろう．
 
 実際に手を動かすところ．
-1. Inference with existing models で Demos の Image demo を動かすために必要なファイルのダウンロード（checkpointファイルのみ）
-2. Demos の Image demo を動かしてみる
+1. [Inference with existing models で Demos の Image demo を動かすために必要なファイルのダウンロード（checkpointファイルのみ）](https://mmdetection.readthedocs.io/en/latest/user_guides/inference.html#inference-with-existing-models)
+2. [Demos の Image demo を動かしてみる](https://mmdetection.readthedocs.io/en/latest/user_guides/inference.html#image-demo)
 
 気力があれば，High-level APIs for inference - Inferencer も読んでみること．
 
