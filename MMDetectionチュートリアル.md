@@ -27,7 +27,6 @@ $ cd mmdet
 $ git clone https://github.com/open-mmlab/mmdetection.git
 $ cd mmdetection
 $ pip install -e . -v
-$ pip install "numpy<2.0.0" # if you got error
 ```
 
 ドキュメントに従って，正しくインストールされたか確認すること．
