@@ -16,9 +16,9 @@ https://mmdetection.readthedocs.io/en/latest/get_started.html
 
 Anacondaインストール後は，以下のコマンドを推奨する．
 ```bash
-$ conda create -n mmdet python=3.12
+$ conda create -n mmdet python=3.11
 $ conda activate mmdet
-$ conda install pytorch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 pytorch-cuda=12.4 -c pytorch -c nvidia
+$ conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=11.8 -c pytorch -c nvidia
 $ pip install -U openmim
 $ mim install "mmengine<1.0.0"
 $ mim install "mmcv>=2.0.0,<2.2.0"
@@ -27,9 +27,17 @@ $ cd mmdet
 $ git clone https://github.com/open-mmlab/mmdetection.git
 $ cd mmdetection
 $ pip install -e . -v
+$ pip install "numpy<2.0.0" # if you got error
 ```
 
 ドキュメントに従って，正しくインストールされたか確認すること．
+
+もしnumpyに関して，下記エラーが出た場合は次のコマンドを実行する．
+RuntimeError: Numpy is not available
+```bash
+$ pip install "numpy<2.0.0"
+```
+
 
 ### 推論
 
